@@ -1,0 +1,55 @@
+{
+  "name": "@ianriizky/bayarindong",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A simple payment gateway service using Next.js made for learning purpose.",
+  "engineStrict": true,
+  "engines": {
+    "node": "^20.16.0"
+  },
+  "volta": {
+    "node": "20.16.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ianriizky/bayarindong.git"
+  },
+  "keywords": [
+    "Frontend",
+    "Bayarindong",
+    "Payment Gateway",
+    "JavaScript",
+    "Node.js",
+    "Next.js"
+  ],
+  "author": {
+    "name": "Septianata Rizky Pratama",
+    "email": "ian.rizkypratama@gmail.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ianriizky/bayarindong/issues"
+  },
+  "homepage": "https://github.com/ianriizky/bayarindong#readme",
+  "scripts": {
+    "dev": "next dev",
+    "dev:secure": "next dev --experimental-https",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "14.2.5",
+    "react": "^18",
+    "react-dom": "^18",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.5",
+    "typescript": "^5"
+  }
+}
