@@ -1,0 +1,14 @@
+{
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  },
+  "cssVariables.lookupFiles": [
+    "**/*.css",
+    "**/*.scss",
+    "**/*.sass",
+    "**/*.less",
+    "node_modules/@mantine/core/styles.css"
+  ],
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true
+}

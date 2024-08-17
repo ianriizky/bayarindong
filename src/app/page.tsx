@@ -1,95 +1,55 @@
-import styles from "@/app/page.module.css";
-import Image from "next/image";
+import { ColorSchemeToggle } from "@/ColorSchemeToggle";
+import { Button, Container, Group, Text } from "@mantine/core";
+import { IconBrandGithubFilled } from "@tabler/icons-react";
+import classes from "./page.module.css";
 
 export default function Page() {
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className={classes.wrapper}>
+      <Container size={700} className={classes.inner}>
+        <h1 className={classes.title}>
+          A{" "}
+          <Text
+            component="span"
+            variant="gradient"
+            gradient={{ from: "blue", to: "cyan" }}
+            inherit
           >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+            fully featured
+          </Text>{" "}
+          React components and hooks library
+        </h1>
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+        <Text className={classes.description} color="dimmed">
+          Build fully functional accessible web applications with ease – Mantine
+          includes more than 100 customizable components and hooks to cover you
+          in any situation
+        </Text>
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+        <Group className={classes.controls}>
+          <Button
+            size="xl"
+            className={classes.control}
+            variant="gradient"
+            gradient={{ from: "blue", to: "cyan" }}
+          >
+            Get started
+          </Button>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
+          <Button
+            component="a"
+            href="https://github.com/mantinedev/mantine"
+            size="xl"
+            variant="default"
+            className={classes.control}
+            leftSection={<IconBrandGithubFilled size={20} />}
+          >
+            GitHub
+          </Button>
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+          <ColorSchemeToggle />
+        </Group>
+      </Container>
+    </div>
   );
 }
