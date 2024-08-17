@@ -1,10 +1,26 @@
 # Bayarindong Payment Gateway
 
-A simple payment gateway service using [Next.js](https://nextjs.org) made for learning purpose.
+A simple payment gateway service using [Next.js](https://nextjs.org) and [ElysiaJS](https://elysiajs.com) made for learning purpose.
 
 ## Requirement
 
 - Node.js ^20.16.0
+- PostgreSQL ^16.3
+
+## Installation
+
+To get started using this app in your localhost, simply paste this command into your terminal:
+
+```bash
+git clone https://github.com/ianriizky/bayarindong.git && cd bayarindong
+cp .env.example .env
+```
+
+Make sure to change `DB_URL` and `DB_URL_NON_POOLING` value on `.env` configuration file using your current database configuration. Then run this command below:
+
+```bash
+npm install
+```
 
 ## Getting Started
 

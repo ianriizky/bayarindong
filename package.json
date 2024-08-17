@@ -2,7 +2,8 @@
   "name": "@ianriizky/bayarindong",
   "version": "1.0.0",
   "private": true,
-  "description": "A simple payment gateway service using Next.js made for learning purpose.",
+  "type": "module",
+  "description": "A simple payment gateway service using Next.js and ElysiaJS made for learning purpose.",
   "engineStrict": true,
   "engines": {
     "node": "^20.16.0"
@@ -15,12 +16,13 @@
     "url": "git+https://github.com/ianriizky/bayarindong.git"
   },
   "keywords": [
-    "Frontend",
     "Bayarindong",
     "Payment Gateway",
     "JavaScript",
     "Node.js",
-    "Next.js"
+    "Next.js",
+    "ElysiaJS",
+    "PostgreSQL"
   ],
   "author": {
     "name": "Septianata Rizky Pratama",
@@ -34,22 +36,47 @@
   "scripts": {
     "dev": "next dev",
     "dev:secure": "next dev --experimental-https",
+    "migrate:dev:local": "npx dotenv -e .env.local -- prisma migrate dev",
+    "migrate:deploy:local": "npx dotenv -e .env.local -- prisma migrate deploy",
+    "migrate:reset:local": "npx dotenv -e .env.local -- prisma migrate reset",
+    "db:push:local": "npx dotenv -e .env.local -- prisma db push",
+    "db:seed:local": "npx dotenv -e .env.local -- prisma db seed",
+    "prisma:generate:local": "npx dotenv -e .env.local -- prisma generate",
+    "prisma:studio:local": "npx dotenv -e .env.local -- prisma studio",
+    "production:build:local": "npm run postinstall && next build",
+    "production:build": "npx prisma generate && npx prisma migrate deploy && next build",
     "build": "next build",
+    "postinstall": "npm run prisma:generate:local && npm run migrate:deploy:local",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@elysiajs/bearer": "^1.1.1",
+    "@elysiajs/cors": "^1.1.0",
+    "@elysiajs/eden": "^1.1.2",
+    "@elysiajs/swagger": "^1.1.1",
+    "@faker-js/faker": "^8.4.1",
+    "@prisma/client": "^5.18.0",
+    "elysia": "^1.1.6",
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18",
+    "tsx": "^4.17.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "chalk": "^4.1.2",
+    "dotenv-cli": "^7.4.2",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
-    "typescript": "^5"
+    "prisma": "^5.18.0",
+    "typescript": "^5.5.4"
+  },
+  "prisma": {
+    "schema": "src/api/database/schema.prisma",
+    "seed": "tsx src/api/database/seeders/index.ts"
   }
 }

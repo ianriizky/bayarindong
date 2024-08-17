@@ -7,19 +7,20 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Bayarindong Payment Gateway",
   description:
-    "A simple payment gateway service using Next.js made for learning purpose.",
+    "A simple payment gateway service using Next.js and ElysiaJS made for learning purpose.",
   applicationName: "Bayarindong",
   authors: {
     name: "Septianata Rizky Pratama",
     url: "https://github.com/ianriizky",
   },
   keywords: [
-    "Frontend",
     "Bayarindong",
     "Payment Gateway",
     "JavaScript",
     "Node.js",
     "Next.js",
+    "ElysiaJS",
+    "PostgreSQL",
   ],
 };
 
