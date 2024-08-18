@@ -1,5 +1,5 @@
-import { createClient, createFetch } from "@/api";
-import env from "@/utils/env";
+import type { App } from "@/api";
+import { edenFetch, treaty } from "@elysiajs/eden";
 
-export const client = createClient(env.API_URL);
-export const fetch = createFetch(env.API_URL);
+export const client = treaty<App>(process.env.APP_URL);
+export const fetch = edenFetch<App>(process.env.API_URL);

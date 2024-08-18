@@ -1,18 +1,55 @@
+import * as ErrorClass from "@/api/error";
 import routes from "@/api/routes";
 import { cors } from "@elysiajs/cors";
-import { edenFetch, treaty } from "@elysiajs/eden";
 import { swagger } from "@elysiajs/swagger";
 import { Elysia } from "elysia";
 
 export const app = new Elysia({ prefix: "/api" })
   .use(cors())
+  .error(ErrorClass)
+  .onError(({ code, error, set }) => {
+    set.headers["content-type"] = "application/json;charset=utf-8";
+
+    if (Object.keys(ErrorClass).includes(code)) {
+      // @ts-ignore
+      set.status = error?.status;
+
+      return { message: error.message };
+    }
+
+    if (
+      ["PrismaClientKnownRequestError", "PrismaClientValidationError"].includes(
+        error.name
+      )
+    ) {
+      set.status = 400;
+      console.error(error);
+
+      return { message: error.message };
+    }
+
+    if (
+      [
+        "PrismaClientUnknownRequestError",
+        "PrismaClientRustPanicError",
+        "PrismaClientInitializationError",
+      ].includes(error.name)
+    ) {
+      set.status = 500;
+      console.error(error);
+
+      return { message: error.message };
+    }
+  })
   .use(
     swagger({
       path: "/doc",
       documentation: {
         info: {
-          title: "Bayarindong Payment Gateway API",
-          version: "1.0.0",
+          title: `${process.env.NEXT_PUBLIC_APP_NAME} Payment Gateway API`,
+          version: process.env.NEXT_PUBLIC_VERSION,
+          description:
+            "A simple payment gateway service using Next.js and ElysiaJS made for learning purpose.",
           license: {
             name: "MIT",
             url: "https://github.com/ianriizky/bayarindong-api/blob/main/LICENSE.md",
@@ -21,11 +58,11 @@ export const app = new Elysia({ prefix: "/api" })
         tags: [
           {
             name: "Homepage",
-            description: "Homepage API.",
+            description: "Homepage API",
           },
           {
-            name: "Deposit",
-            description: "Deposit API.",
+            name: "Authentication",
+            description: "Authentication API",
           },
         ],
         components: {
@@ -59,5 +96,3 @@ export const app = new Elysia({ prefix: "/api" })
   .use(routes);
 
 export type App = typeof app;
-export const createClient = treaty<App>;
-export const createFetch = edenFetch<App>;

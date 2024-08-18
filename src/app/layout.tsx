@@ -1,19 +1,24 @@
+import NextAuthSessionProvider from "@/provider/NextAuthSessionProvider";
 import { theme } from "@/theme/mantine";
 import { ColorSchemeScript, MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
+import { Notifications } from "@mantine/notifications";
+import "@mantine/notifications/styles.css";
 import { Metadata, Viewport } from "next";
+import { getServerSession } from "next-auth";
 
 export const metadata: Metadata = {
-  title: "Bayarindong Payment Gateway",
+  metadataBase: new URL(process.env.APP_URL),
+  title: `${process.env.NEXT_PUBLIC_APP_NAME} Payment Gateway`,
   description:
     "A simple payment gateway service using Next.js and ElysiaJS made for learning purpose.",
-  applicationName: "Bayarindong",
+  applicationName: process.env.NEXT_PUBLIC_APP_NAME,
   authors: {
     name: "Septianata Rizky Pratama",
     url: "https://github.com/ianriizky",
   },
   keywords: [
-    "Bayarindong",
+    process.env.NEXT_PUBLIC_APP_NAME,
     "Payment Gateway",
     "JavaScript",
     "Node.js",
@@ -31,18 +36,25 @@ export const viewport: Viewport = {
   userScalable: false,
 };
 
-export default function Layout({
+export default async function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession();
+
   return (
-    <html lang="id">
+    <html lang="en">
       <head>
         <ColorSchemeScript />
       </head>
       <body>
-        <MantineProvider theme={theme}>{children}</MantineProvider>
+        <NextAuthSessionProvider session={session}>
+          <MantineProvider theme={theme}>
+            <Notifications limit={5} />
+            {children}
+          </MantineProvider>
+        </NextAuthSessionProvider>
       </body>
     </html>
   );
