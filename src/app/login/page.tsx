@@ -6,6 +6,7 @@ import {
   Container,
   Divider,
   Group,
+  LoadingOverlay,
   Paper,
   PasswordInput,
   rem,
@@ -14,16 +15,16 @@ import {
   TextInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { IconArrowNarrowLeft, IconCheck, IconX } from "@tabler/icons-react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 export default function Page() {
   const router = useRouter();
-  const [isFormLoading, setIsFormLoading] = useState<boolean>(false);
+  const [isFormLoading, handlerIsFormLoading] = useDisclosure(false);
   const form = useForm({
     initialValues: {
       email: "",
@@ -42,13 +43,13 @@ export default function Page() {
   const formSubmitHandler: Parameters<typeof form.onSubmit>[0] = async (
     values
   ) => {
-    setIsFormLoading(true);
+    handlerIsFormLoading.open();
     const response = await signIn("credentials", {
       email: values.email,
       password: values.password,
       redirect: false,
     });
-    setIsFormLoading(false);
+    handlerIsFormLoading.close();
 
     if (!response?.ok) {
       notifications.show({
@@ -76,7 +77,13 @@ export default function Page() {
 
   return (
     <Container size={420} my={40}>
-      <Paper radius="md" p="xl" withBorder>
+      <Paper radius="md" p="xl" withBorder pos="relative">
+        <LoadingOverlay
+          visible={isFormLoading}
+          zIndex={1000}
+          overlayProps={{ radius: "sm", blur: 2 }}
+        />
+
         <Divider
           labelPosition="left"
           label={

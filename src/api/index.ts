@@ -64,6 +64,10 @@ export const app = new Elysia({ prefix: "/api" })
             name: "Authentication",
             description: "Authentication API",
           },
+          {
+            name: "Transaction",
+            description: "Transaction API",
+          },
         ],
         components: {
           securitySchemes: {

@@ -8,8 +8,15 @@ import {
   useComputedColorScheme,
   useMantineColorScheme,
 } from "@mantine/core";
-import { IconBook, IconLogin, IconMoon, IconSun } from "@tabler/icons-react";
+import {
+  IconBook,
+  IconLogin,
+  IconLogout,
+  IconMoon,
+  IconSun,
+} from "@tabler/icons-react";
 import cx from "clsx";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import classes from "./page.module.css";
 
@@ -18,6 +25,7 @@ export default function Page() {
   const computedColorScheme = useComputedColorScheme("light", {
     getInitialValueInEffect: true,
   });
+  const { status } = useSession();
 
   return (
     <div className={classes.wrapper}>
@@ -42,26 +50,43 @@ export default function Page() {
         </Text>
 
         <Group className={classes.controls}>
-          <Button
-            component={Link}
-            href="/register"
-            size="xl"
-            className={classes.control}
-            variant="gradient"
-          >
-            Sign Up Now
-          </Button>
+          {status === "unauthenticated" && (
+            <>
+              <Button
+                component={Link}
+                href="/register"
+                size="xl"
+                className={classes.control}
+                variant="gradient"
+              >
+                Sign Up Now
+              </Button>
 
-          <Button
-            component={Link}
-            href="/login"
-            size="xl"
-            variant="default"
-            className={classes.control}
-            leftSection={<IconLogin size={20} />}
-          >
-            Sign In
-          </Button>
+              <Button
+                component={Link}
+                href="/login"
+                size="xl"
+                variant="default"
+                className={classes.control}
+                leftSection={<IconLogin size={20} />}
+              >
+                Sign In
+              </Button>
+            </>
+          )}
+
+          {status === "authenticated" && (
+            <Button
+              component={Link}
+              href="/dashboard"
+              size="xl"
+              className={classes.control}
+              leftSection={<IconLogout size={20} />}
+              variant="gradient"
+            >
+              Go to Dashboard
+            </Button>
+          )}
         </Group>
 
         <Group my={20}>

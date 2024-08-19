@@ -25,6 +25,7 @@ export default new Elysia()
         data: {
           name: user.name,
           email: user.email,
+          gravatar_image: user.gravatar_image,
           token: user.token,
           role: user.role.name,
         },
@@ -40,6 +41,7 @@ export default new Elysia()
         data: t.Object({
           name: t.String(),
           email: t.String(),
+          gravatar_image: t.String(),
           token: t.String(),
           role: t.String(),
         }),

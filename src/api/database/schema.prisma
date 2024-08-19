@@ -35,8 +35,10 @@ model User {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  role   Role    @relation(fields: [role_id], references: [id])
-  orders Order[]
+  role                      Role                     @relation(fields: [role_id], references: [id])
+  orders                    Order[]
+  firebase_cloud_messagings FirebaseCloudMessaging[]
+  notifications             Notification[]
 
   @@map("users")
 }
@@ -45,10 +47,10 @@ model Order {
   id      String @id @default(uuid()) @db.Char(36)
   user_id String @db.Char(36)
 
-  amount    Decimal     @db.Decimal
-  timestamp DateTime
   type      OrderType
+  amount    Decimal     @db.Decimal
   status    OrderStatus @default(pending)
+  timestamp DateTime
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -56,6 +58,36 @@ model Order {
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@map("orders")
+}
+
+model FirebaseCloudMessaging {
+  id      String @id @default(uuid())
+  user_id String @db.Char(36)
+
+  token String @unique
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("firebase_cloud_messagings")
+}
+
+model Notification {
+  id      String @id @default(uuid())
+  user_id String @db.Char(36)
+
+  title   String  @db.VarChar(255)
+  content String  @db.VarChar(255)
+  is_read Boolean @default(false)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
 }
 
 enum OrderType {
