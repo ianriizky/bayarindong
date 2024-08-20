@@ -4,6 +4,18 @@ import * as hash from "@/lib/hash";
 import { Elysia, t } from "elysia";
 
 export default new Elysia()
+  .model({
+    "auth.response.body": t.Object({
+      message: t.String(),
+      data: t.Object({
+        name: t.String(),
+        email: t.String(),
+        gravatar_image: t.String(),
+        access_token: t.String(),
+        role: t.String(),
+      }),
+    }),
+  })
   .post(
     "/login",
     async ({ body }) => {
@@ -26,7 +38,7 @@ export default new Elysia()
           name: user.name,
           email: user.email,
           gravatar_image: user.gravatar_image,
-          token: user.token,
+          access_token: user.access_token,
           role: user.role.name,
         },
       };
@@ -36,16 +48,7 @@ export default new Elysia()
         email: t.String({ format: "email" }),
         password: t.String({ minLength: 6 }),
       }),
-      response: t.Object({
-        message: t.String(),
-        data: t.Object({
-          name: t.String(),
-          email: t.String(),
-          gravatar_image: t.String(),
-          token: t.String(),
-          role: t.String(),
-        }),
-      }),
+      response: "auth.response.body",
       detail: {
         tags: ["Authentication"],
         summary: "login",
@@ -66,77 +69,6 @@ export default new Elysia()
         responses: {
           "200": {
             description: "OK",
-            headers: {
-              "Access-Control-Allow-Credentials": {
-                schema: {
-                  type: "boolean",
-                  example: true,
-                },
-              },
-              "Access-Control-Allow-Headers": {
-                schema: {
-                  type: "string",
-                  example:
-                    "accept, accept-encoding, accept-language, connection, content-length, content-type, cookie, dnt, host, origin, referer, sec-ch-ua, sec-ch-ua-mobile, sec-ch-ua-platform, sec-fetch-dest, sec-fetch-mode, sec-fetch-site, user-agent, x-forwarded-for, x-forwarded-host, x-forwarded-port, x-forwarded-proto,",
-                },
-              },
-              "Access-Control-Allow-Methods": {
-                schema: {
-                  type: "string",
-                  example: "POST",
-                },
-              },
-              "Access-Control-Allow-Origin": {
-                schema: {
-                  type: "string",
-                  example: "https://localhost:3000",
-                },
-              },
-              "Access-Control-Expose-Headers": {
-                schema: {
-                  type: "string",
-                  example:
-                    "accept, accept-encoding, accept-language, connection, content-length, content-type, cookie, dnt, host, origin, referer, sec-ch-ua, sec-ch-ua-mobile, sec-ch-ua-platform, sec-fetch-dest, sec-fetch-mode, sec-fetch-site, user-agent, x-forwarded-for, x-forwarded-host, x-forwarded-port, x-forwarded-proto,",
-                },
-              },
-              Connection: {
-                schema: {
-                  type: "string",
-                  example: "keep-alive",
-                },
-              },
-              "Content-Type": {
-                schema: {
-                  type: "string",
-                  example: "application/json",
-                },
-              },
-              Date: {
-                schema: {
-                  type: "string",
-                  example: "Sat, 17 Aug 2024 00:00:00 GMT",
-                },
-              },
-              "Keep-Alive": {
-                schema: {
-                  type: "string",
-                  example: "timeout=5",
-                },
-              },
-              "Transfer-Encoding": {
-                schema: {
-                  type: "string",
-                  example: "chunked",
-                },
-              },
-              Vary: {
-                schema: {
-                  type: "string",
-                  example:
-                    "RSC, Next-Router-State-Tree, Next-Router-Prefetch, *",
-                },
-              },
-            },
             content: {
               "application/json": {
                 schema: {
@@ -146,7 +78,8 @@ export default new Elysia()
                     data: {
                       name: "Member",
                       email: "member@mail.com",
-                      token: "abcdef",
+                      gravatar_image: "https://www.gravatar.com/avatar",
+                      access_token: "abcdef",
                       role: "member",
                     },
                   },
@@ -156,77 +89,6 @@ export default new Elysia()
           },
           "404": {
             description: "Not Found",
-            headers: {
-              "access-control-allow-credentials": {
-                schema: {
-                  type: "boolean",
-                  example: true,
-                },
-              },
-              "access-control-allow-headers": {
-                schema: {
-                  type: "string",
-                  example:
-                    "accept, accept-encoding, accept-language, connection, content-length, content-type, cookie, dnt, host, origin, referer, sec-ch-ua, sec-ch-ua-mobile, sec-ch-ua-platform, sec-fetch-dest, sec-fetch-mode, sec-fetch-site, user-agent, x-forwarded-for, x-forwarded-host, x-forwarded-port, x-forwarded-proto,",
-                },
-              },
-              "access-control-allow-methods": {
-                schema: {
-                  type: "string",
-                  example: "POST",
-                },
-              },
-              "access-control-allow-origin": {
-                schema: {
-                  type: "string",
-                  example: "https://localhost:3000",
-                },
-              },
-              "access-control-expose-headers": {
-                schema: {
-                  type: "string",
-                  example:
-                    "accept, accept-encoding, accept-language, connection, content-length, content-type, cookie, dnt, host, origin, referer, sec-ch-ua, sec-ch-ua-mobile, sec-ch-ua-platform, sec-fetch-dest, sec-fetch-mode, sec-fetch-site, user-agent, x-forwarded-for, x-forwarded-host, x-forwarded-port, x-forwarded-proto,",
-                },
-              },
-              connection: {
-                schema: {
-                  type: "string",
-                  example: "keep-alive",
-                },
-              },
-              "content-type": {
-                schema: {
-                  type: "string",
-                  example: "application/json",
-                },
-              },
-              date: {
-                schema: {
-                  type: "string",
-                  example: "Sat, 17 Aug 2024 00:00:00 GMT",
-                },
-              },
-              "keep-alive": {
-                schema: {
-                  type: "string",
-                  example: "timeout=5",
-                },
-              },
-              "transfer-encoding": {
-                schema: {
-                  type: "string",
-                  example: "chunked",
-                },
-              },
-              vary: {
-                schema: {
-                  type: "string",
-                  example:
-                    "RSC, Next-Router-State-Tree, Next-Router-Prefetch, *",
-                },
-              },
-            },
             content: {
               "application/json": {
                 schema: {
@@ -240,77 +102,6 @@ export default new Elysia()
           },
           "401": {
             description: "Unauthorized",
-            headers: {
-              "access-control-allow-credentials": {
-                schema: {
-                  type: "boolean",
-                  example: true,
-                },
-              },
-              "access-control-allow-headers": {
-                schema: {
-                  type: "string",
-                  example:
-                    "accept, accept-encoding, accept-language, connection, content-length, content-type, cookie, dnt, host, origin, referer, sec-ch-ua, sec-ch-ua-mobile, sec-ch-ua-platform, sec-fetch-dest, sec-fetch-mode, sec-fetch-site, user-agent, x-forwarded-for, x-forwarded-host, x-forwarded-port, x-forwarded-proto,",
-                },
-              },
-              "access-control-allow-methods": {
-                schema: {
-                  type: "string",
-                  example: "POST",
-                },
-              },
-              "access-control-allow-origin": {
-                schema: {
-                  type: "string",
-                  example: "https://localhost:3000",
-                },
-              },
-              "access-control-expose-headers": {
-                schema: {
-                  type: "string",
-                  example:
-                    "accept, accept-encoding, accept-language, connection, content-length, content-type, cookie, dnt, host, origin, referer, sec-ch-ua, sec-ch-ua-mobile, sec-ch-ua-platform, sec-fetch-dest, sec-fetch-mode, sec-fetch-site, user-agent, x-forwarded-for, x-forwarded-host, x-forwarded-port, x-forwarded-proto,",
-                },
-              },
-              connection: {
-                schema: {
-                  type: "string",
-                  example: "keep-alive",
-                },
-              },
-              "content-type": {
-                schema: {
-                  type: "string",
-                  example: "application/json",
-                },
-              },
-              date: {
-                schema: {
-                  type: "string",
-                  example: "Sat, 17 Aug 2024 00:00:00 GMT",
-                },
-              },
-              "keep-alive": {
-                schema: {
-                  type: "string",
-                  example: "timeout=5",
-                },
-              },
-              "transfer-encoding": {
-                schema: {
-                  type: "string",
-                  example: "chunked",
-                },
-              },
-              vary: {
-                schema: {
-                  type: "string",
-                  example:
-                    "RSC, Next-Router-State-Tree, Next-Router-Prefetch, *",
-                },
-              },
-            },
             content: {
               "application/json": {
                 schema: {
@@ -324,77 +115,6 @@ export default new Elysia()
           },
           "422": {
             description: "Unprocessable Content",
-            headers: {
-              "access-control-allow-credentials": {
-                schema: {
-                  type: "boolean",
-                  example: true,
-                },
-              },
-              "access-control-allow-headers": {
-                schema: {
-                  type: "string",
-                  example:
-                    "accept, accept-encoding, accept-language, connection, content-length, content-type, cookie, dnt, host, origin, referer, sec-ch-ua, sec-ch-ua-mobile, sec-ch-ua-platform, sec-fetch-dest, sec-fetch-mode, sec-fetch-site, user-agent, x-forwarded-for, x-forwarded-host, x-forwarded-port, x-forwarded-proto,",
-                },
-              },
-              "access-control-allow-methods": {
-                schema: {
-                  type: "string",
-                  example: "POST",
-                },
-              },
-              "access-control-allow-origin": {
-                schema: {
-                  type: "string",
-                  example: "https://localhost:3000",
-                },
-              },
-              "access-control-expose-headers": {
-                schema: {
-                  type: "string",
-                  example:
-                    "accept, accept-encoding, accept-language, connection, content-length, content-type, cookie, dnt, host, origin, referer, sec-ch-ua, sec-ch-ua-mobile, sec-ch-ua-platform, sec-fetch-dest, sec-fetch-mode, sec-fetch-site, user-agent, x-forwarded-for, x-forwarded-host, x-forwarded-port, x-forwarded-proto,",
-                },
-              },
-              connection: {
-                schema: {
-                  type: "string",
-                  example: "keep-alive",
-                },
-              },
-              "content-type": {
-                schema: {
-                  type: "string",
-                  example: "application/json;charset=utf-8",
-                },
-              },
-              date: {
-                schema: {
-                  type: "string",
-                  example: "Sat, 17 Aug 2024 00:00:00 GMT",
-                },
-              },
-              "keep-alive": {
-                schema: {
-                  type: "string",
-                  example: "timeout=5",
-                },
-              },
-              "transfer-encoding": {
-                schema: {
-                  type: "string",
-                  example: "chunked",
-                },
-              },
-              vary: {
-                schema: {
-                  type: "string",
-                  example:
-                    "RSC, Next-Router-State-Tree, Next-Router-Prefetch, *",
-                },
-              },
-            },
             content: {
               "application/json": {
                 schema: {
@@ -479,7 +199,8 @@ export default new Elysia()
         data: {
           name: user.name,
           email: user.email,
-          token: user.token,
+          gravatar_image: user.gravatar_image,
+          access_token: user.access_token,
           role: user.role.name,
         },
       };
@@ -491,15 +212,7 @@ export default new Elysia()
         password: t.String({ minLength: 6, maxLength: 25 }),
         terms: t.Boolean(),
       }),
-      response: t.Object({
-        message: t.String(),
-        data: t.Object({
-          name: t.String(),
-          email: t.String(),
-          token: t.String(),
-          role: t.String(),
-        }),
-      }),
+      response: "auth.response.body",
       detail: {
         tags: ["Authentication"],
         summary: "register",
@@ -522,77 +235,6 @@ export default new Elysia()
         responses: {
           "201": {
             description: "Created",
-            headers: {
-              "Access-Control-Allow-Credentials": {
-                schema: {
-                  type: "boolean",
-                  example: true,
-                },
-              },
-              "Access-Control-Allow-Headers": {
-                schema: {
-                  type: "string",
-                  example:
-                    "accept, accept-encoding, accept-language, connection, content-length, content-type, cookie, dnt, host, origin, referer, sec-ch-ua, sec-ch-ua-mobile, sec-ch-ua-platform, sec-fetch-dest, sec-fetch-mode, sec-fetch-site, user-agent, x-forwarded-for, x-forwarded-host, x-forwarded-port, x-forwarded-proto,",
-                },
-              },
-              "Access-Control-Allow-Methods": {
-                schema: {
-                  type: "string",
-                  example: "POST",
-                },
-              },
-              "Access-Control-Allow-Origin": {
-                schema: {
-                  type: "string",
-                  example: "https://localhost:3000",
-                },
-              },
-              "Access-Control-Expose-Headers": {
-                schema: {
-                  type: "string",
-                  example:
-                    "accept, accept-encoding, accept-language, connection, content-length, content-type, cookie, dnt, host, origin, referer, sec-ch-ua, sec-ch-ua-mobile, sec-ch-ua-platform, sec-fetch-dest, sec-fetch-mode, sec-fetch-site, user-agent, x-forwarded-for, x-forwarded-host, x-forwarded-port, x-forwarded-proto,",
-                },
-              },
-              Connection: {
-                schema: {
-                  type: "string",
-                  example: "keep-alive",
-                },
-              },
-              "Content-Type": {
-                schema: {
-                  type: "string",
-                  example: "application/json",
-                },
-              },
-              Date: {
-                schema: {
-                  type: "string",
-                  example: "Sat, 17 Aug 2024 00:00:00 GMT",
-                },
-              },
-              "Keep-Alive": {
-                schema: {
-                  type: "string",
-                  example: "timeout=5",
-                },
-              },
-              "Transfer-Encoding": {
-                schema: {
-                  type: "string",
-                  example: "chunked",
-                },
-              },
-              Vary: {
-                schema: {
-                  type: "string",
-                  example:
-                    "RSC, Next-Router-State-Tree, Next-Router-Prefetch, *",
-                },
-              },
-            },
             content: {
               "application/json": {
                 schema: {
@@ -602,7 +244,8 @@ export default new Elysia()
                     data: {
                       name: "Member",
                       email: "member@mail.com",
-                      token: "abcdef",
+                      gravatar_image: "https://www.gravatar.com/avatar",
+                      access_token: "abcdef",
                       role: "member",
                     },
                   },
@@ -612,77 +255,6 @@ export default new Elysia()
           },
           "400": {
             description: "Bad Request",
-            headers: {
-              "access-control-allow-credentials": {
-                schema: {
-                  type: "boolean",
-                  example: true,
-                },
-              },
-              "access-control-allow-headers": {
-                schema: {
-                  type: "string",
-                  example:
-                    "accept, accept-encoding, accept-language, connection, content-length, content-type, cookie, dnt, host, origin, referer, sec-ch-ua, sec-ch-ua-mobile, sec-ch-ua-platform, sec-fetch-dest, sec-fetch-mode, sec-fetch-site, user-agent, x-forwarded-for, x-forwarded-host, x-forwarded-port, x-forwarded-proto,",
-                },
-              },
-              "access-control-allow-methods": {
-                schema: {
-                  type: "string",
-                  example: "POST",
-                },
-              },
-              "access-control-allow-origin": {
-                schema: {
-                  type: "string",
-                  example: "https://localhost:3000",
-                },
-              },
-              "access-control-expose-headers": {
-                schema: {
-                  type: "string",
-                  example:
-                    "accept, accept-encoding, accept-language, connection, content-length, content-type, cookie, dnt, host, origin, referer, sec-ch-ua, sec-ch-ua-mobile, sec-ch-ua-platform, sec-fetch-dest, sec-fetch-mode, sec-fetch-site, user-agent, x-forwarded-for, x-forwarded-host, x-forwarded-port, x-forwarded-proto,",
-                },
-              },
-              connection: {
-                schema: {
-                  type: "string",
-                  example: "keep-alive",
-                },
-              },
-              "content-type": {
-                schema: {
-                  type: "string",
-                  example: "application/json",
-                },
-              },
-              date: {
-                schema: {
-                  type: "string",
-                  example: "Sat, 17 Aug 2024 00:00:00 GMT",
-                },
-              },
-              "keep-alive": {
-                schema: {
-                  type: "string",
-                  example: "timeout=5",
-                },
-              },
-              "transfer-encoding": {
-                schema: {
-                  type: "string",
-                  example: "chunked",
-                },
-              },
-              Vary: {
-                schema: {
-                  type: "string",
-                  example:
-                    "RSC, Next-Router-State-Tree, Next-Router-Prefetch, *",
-                },
-              },
-            },
             content: {
               "application/json": {
                 schema: {
@@ -697,77 +269,6 @@ export default new Elysia()
           },
           "422": {
             description: "Unprocessable Content",
-            headers: {
-              "access-control-allow-credentials": {
-                schema: {
-                  type: "boolean",
-                  example: true,
-                },
-              },
-              "access-control-allow-headers": {
-                schema: {
-                  type: "string",
-                  example:
-                    "accept, accept-encoding, accept-language, connection, content-length, content-type, cookie, dnt, host, origin, referer, sec-ch-ua, sec-ch-ua-mobile, sec-ch-ua-platform, sec-fetch-dest, sec-fetch-mode, sec-fetch-site, user-agent, x-forwarded-for, x-forwarded-host, x-forwarded-port, x-forwarded-proto,",
-                },
-              },
-              "access-control-allow-methods": {
-                schema: {
-                  type: "string",
-                  example: "POST",
-                },
-              },
-              "access-control-allow-origin": {
-                schema: {
-                  type: "string",
-                  example: "https://localhost:3000",
-                },
-              },
-              "access-control-expose-headers": {
-                schema: {
-                  type: "string",
-                  example:
-                    "accept, accept-encoding, accept-language, connection, content-length, content-type, cookie, dnt, host, origin, referer, sec-ch-ua, sec-ch-ua-mobile, sec-ch-ua-platform, sec-fetch-dest, sec-fetch-mode, sec-fetch-site, user-agent, x-forwarded-for, x-forwarded-host, x-forwarded-port, x-forwarded-proto,",
-                },
-              },
-              connection: {
-                schema: {
-                  type: "string",
-                  example: "keep-alive",
-                },
-              },
-              "content-type": {
-                schema: {
-                  type: "string",
-                  example: "application/json;charset=utf-8",
-                },
-              },
-              date: {
-                schema: {
-                  type: "string",
-                  example: "Sat, 17 Aug 2024 00:00:00 GMT",
-                },
-              },
-              "keep-alive": {
-                schema: {
-                  type: "string",
-                  example: "timeout=5",
-                },
-              },
-              "transfer-encoding": {
-                schema: {
-                  type: "string",
-                  example: "chunked",
-                },
-              },
-              Vary: {
-                schema: {
-                  type: "string",
-                  example:
-                    "RSC, Next-Router-State-Tree, Next-Router-Prefetch, *",
-                },
-              },
-            },
             content: {
               "application/json": {
                 schema: {

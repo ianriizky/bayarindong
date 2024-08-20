@@ -42,7 +42,16 @@ const modelX = model.$extends({
   },
   result: {
     user: {
-      token: {
+      gravatar_image: {
+        needs: { email: true },
+        compute(user) {
+          return `https://www.gravatar.com/avatar/${crypto
+            .createHash("md5")
+            .update(user.email || "")
+            .digest("hex")}`;
+        },
+      },
+      access_token: {
         needs: { name: true },
         compute(user) {
           return btoa(user.name);
@@ -64,15 +73,6 @@ const modelX = model.$extends({
               return balance;
             }
           }, 0);
-        },
-      },
-      gravatar_image: {
-        needs: { email: true },
-        compute(user) {
-          return `https://www.gravatar.com/avatar/${crypto
-            .createHash("md5")
-            .update(user.email || "")
-            .digest("hex")}`;
         },
       },
     },

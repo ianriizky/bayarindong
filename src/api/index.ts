@@ -8,7 +8,7 @@ export const app = new Elysia({ prefix: "/api" })
   .use(cors())
   .error(ErrorClass)
   .onError(({ code, error, set }) => {
-    set.headers["content-type"] = "application/json;charset=utf-8";
+    set.headers["content-type"] = "application/json";
 
     if (Object.keys(ErrorClass).includes(code)) {
       // @ts-ignore
@@ -17,25 +17,17 @@ export const app = new Elysia({ prefix: "/api" })
       return { message: error.message };
     }
 
-    if (
-      ["PrismaClientKnownRequestError", "PrismaClientValidationError"].includes(
-        error.name
-      )
-    ) {
-      set.status = 400;
-      console.error(error);
+    /** @see https://www.prisma.io/docs/orm/reference/error-reference */
+    const prismaErrors = new Map([
+      ["PrismaClientKnownRequestError", 400],
+      ["PrismaClientValidationError", 400],
+      ["PrismaClientUnknownRequestError", 500],
+      ["PrismaClientRustPanicError", 500],
+      ["PrismaClientInitializationError", 500],
+    ]);
 
-      return { message: error.message };
-    }
-
-    if (
-      [
-        "PrismaClientUnknownRequestError",
-        "PrismaClientRustPanicError",
-        "PrismaClientInitializationError",
-      ].includes(error.name)
-    ) {
-      set.status = 500;
+    if (prismaErrors.has(error.name)) {
+      set.status = prismaErrors.get(error.name);
       console.error(error);
 
       return { message: error.message };
