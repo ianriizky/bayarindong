@@ -1,5 +1,5 @@
+import { envSchema } from "@/utils/env.mjs";
 import { z } from "zod";
-import { envSchema } from "./env.mjs";
 
 declare global {
   namespace NodeJS {
