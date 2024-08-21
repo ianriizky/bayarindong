@@ -20,11 +20,13 @@ const handler = NextAuth({
         password: { label: "Password", type: "password" },
       },
 
-      async authorize(credentials, req) {
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) {
+          return null;
+        }
+
         const response = await client.api.login.post({
-          // @ts-ignore
           email: credentials?.email,
-          // @ts-ignore
           password: credentials?.password,
         });
 
@@ -33,12 +35,12 @@ const handler = NextAuth({
         }
 
         return {
-          id: response.data?.data.email,
-          name: response.data?.data.name,
-          email: response.data?.data.email,
-          image: response.data?.data.gravatar_image,
-          access_token: response.data?.data.token,
-          role: response.data?.data.role,
+          id: response.data.data.email,
+          name: response.data.data.name,
+          email: response.data.data.email,
+          image: response.data.data.gravatar_image,
+          access_token: response.data.data.access_token,
+          role_name: response.data.data.role_name,
         };
       },
     }),
@@ -46,23 +48,21 @@ const handler = NextAuth({
 
   callbacks: {
     async jwt({ token, user }) {
-      // @ts-ignore
-      if (user && user?.role) {
-        // @ts-ignore
+      if (user && user.role_name) {
         token.access_token = user.access_token;
-        // @ts-ignore
-        token.role = user.role;
+        token.role_name = user.role_name;
       }
 
       return token;
     },
 
     async session({ session, token }) {
-      if (session?.user && token?.role) {
-        // @ts-ignore
-        session.user.access_token = token?.access_token;
-        // @ts-ignore
-        session.user.role = token?.role;
+      if (session.user && token.access_token) {
+        session.user.access_token = token.access_token;
+      }
+
+      if (session.user && token.role_name) {
+        session.user.role_name = token.role_name;
       }
 
       return session;

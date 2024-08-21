@@ -30,36 +30,40 @@ export default function Page() {
 
           <TextInput
             label="Role"
-            // @ts-ignore
-            value={session?.user?.role || ""}
+            value={session?.user?.role_name || ""}
             radius="md"
             readOnly
           />
 
           <TextInput
             label="Access Token"
-            placeholder="Clearable input"
-            // @ts-ignore
+            placeholder="Your access token"
             value={session?.user?.access_token || ""}
+            readOnly
             rightSectionPointerEvents="all"
             rightSection={
-              <IconCopy
-                style={{ cursor: "pointer" }}
-                aria-label="Copy access token"
-                onClick={() => {
-                  // @ts-ignore
-                  navigator.clipboard.writeText(session?.user?.access_token);
+              session?.user?.access_token && (
+                <IconCopy
+                  style={{ cursor: "pointer" }}
+                  aria-label="Copy access token"
+                  onClick={() => {
+                    navigator.clipboard.writeText(
+                      session?.user?.access_token || ""
+                    );
 
-                  notifications.show({
-                    icon: (
-                      <IconCheck style={{ width: rem(20), height: rem(20) }} />
-                    ),
-                    color: "teal",
-                    title: "Success",
-                    message: "Access token copied successfully.",
-                  });
-                }}
-              />
+                    notifications.show({
+                      icon: (
+                        <IconCheck
+                          style={{ width: rem(20), height: rem(20) }}
+                        />
+                      ),
+                      color: "teal",
+                      title: "Success",
+                      message: "Access token copied successfully.",
+                    });
+                  }}
+                />
+              )
             }
           />
         </Stack>
