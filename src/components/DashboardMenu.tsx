@@ -72,9 +72,9 @@ export default function DashboardMenu({
         component={Link}
         href={menu.link}
         key={index}
-        data-active={menu.label === activeDashboardMenu || undefined}
+        data-active={menu.link === activeDashboardMenu || undefined}
         onClick={() => {
-          setActiveDashboardMenu(menu.label);
+          setActiveDashboardMenu(menu.link);
         }}
         {...unstyledButtonProps}
       >

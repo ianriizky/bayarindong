@@ -23,6 +23,7 @@ import { IconBook, IconLogout, IconMoon, IconSun } from "@tabler/icons-react";
 import cx from "clsx";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import classes from "./page.module.css";
 
 export default function Layout({
@@ -30,12 +31,13 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
   const { setColorScheme } = useMantineColorScheme();
   const theme = useMantineTheme();
   const [opened, { toggle }] = useDisclosure();
   const { data: session } = useSession();
   const [activeDashboardMenu, setActiveDashboardMenu] =
-    useStateActiveDashboardMenu("Dashboard");
+    useStateActiveDashboardMenu(pathname);
 
   return (
     <AppShell
@@ -75,10 +77,12 @@ export default function Layout({
             <UnstyledButton
               component={Link}
               className={classes.link}
-              data-active={"Profile" === activeDashboardMenu || undefined}
+              data-active={
+                "/dashboard/profile" === activeDashboardMenu || undefined
+              }
               href="/dashboard/profile"
               onClick={() => {
-                setActiveDashboardMenu("Profile");
+                setActiveDashboardMenu("/dashboard/profile");
               }}
             >
               <Group>

@@ -9,14 +9,14 @@ import {
 } from "react";
 
 export type StateActiveDashboardMenu = [
-  Menu["label"],
-  Dispatch<SetStateAction<Menu["label"]>>
+  Menu["link"],
+  Dispatch<SetStateAction<Menu["link"]>>
 ];
 
 export function useStateActiveDashboardMenu(
-  initialState: Menu["label"] = ""
+  initialState: Menu["link"] = ""
 ): StateActiveDashboardMenu {
-  return useState<Menu["label"]>(initialState);
+  return useState<Menu["link"]>(initialState);
 }
 
 export const ActiveDashboardMenuContext =
