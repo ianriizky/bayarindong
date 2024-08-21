@@ -11,7 +11,7 @@ export async function middleware(request: NextRequest) {
   if (
     (token && ["/login", "/register"].includes(pathname)) ||
     (token &&
-      token?.role !== "admin" &&
+      token?.role_name !== "admin" &&
       ["/dashboard/order"].includes(pathname))
   ) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
