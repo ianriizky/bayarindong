@@ -3,6 +3,7 @@ import routes from "@/api/routes";
 import { cors } from "@elysiajs/cors";
 import { swagger } from "@elysiajs/swagger";
 import { Elysia } from "elysia";
+import { ElysiaErrors } from "elysia/error";
 
 export const app = new Elysia({ prefix: "/api" })
   .use(cors())
@@ -11,8 +12,7 @@ export const app = new Elysia({ prefix: "/api" })
     set.headers["content-type"] = "application/json";
 
     if (Object.keys(ErrorClass).includes(code)) {
-      // @ts-ignore
-      set.status = error?.status;
+      set.status = (error as ElysiaErrors)?.status;
 
       return { message: error.message };
     }

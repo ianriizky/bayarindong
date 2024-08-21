@@ -1,4 +1,4 @@
-import { InternalServerError } from "./InternalServerError";
+import { InternalServerError } from "elysia";
 
 /**
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401
