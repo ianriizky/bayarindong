@@ -58,6 +58,9 @@ export const envSchema = z.object({
   NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: z.string(),
   NEXT_PUBLIC_FIREBASE_FCM_VAPID_KEY: z.string(),
   NEXT_PUBLIC_GOOGLE_ANALYTICS_ID: z.string(),
+  DISABLE_TELEMETRY: z
+    .enum(["true", "false"])
+    .transform((value) => value || "true"),
 });
 
 const { NODE_ENV, ...env } = envSchema.parse(process.env);
