@@ -20,7 +20,7 @@ cp .env.example .env
 Make sure to change `DB_URL` and `DB_URL_NON_POOLING` value on `.env` configuration file using your current database configuration. Then run this command below:
 
 ```bash
-npm install
+pnpm install
 ```
 
 ## Getting Started
@@ -28,8 +28,8 @@ npm install
 First, run the development server:
 
 ```bash
-npm run dev
-npm run dev:secure # run server using https
+pnpm run dev
+pnpm run dev:secure # run server using https
 ```
 
 Open http://localhost:3000 with your browser to see the result.
