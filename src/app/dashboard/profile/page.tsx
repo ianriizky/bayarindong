@@ -1,12 +1,14 @@
 "use client";
 
 import { Container, Paper, rem, Stack, TextInput, Title } from "@mantine/core";
+import { useClipboard } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { IconCheck, IconCopy } from "@tabler/icons-react";
 import { useSession } from "next-auth/react";
 
 export default function Page() {
   const { data: session } = useSession();
+  const clipboard = useClipboard({ timeout: 500 });
 
   return (
     <Container size="sm">
@@ -46,10 +48,13 @@ export default function Page() {
                 <IconCopy
                   style={{ cursor: "pointer" }}
                   aria-label="Copy access token"
+                  color={
+                    clipboard.copied
+                      ? "var(--mantine-color-orange-5)"
+                      : "var(--mantine-color-dimmed)"
+                  }
                   onClick={() => {
-                    navigator.clipboard.writeText(
-                      session?.user?.access_token || ""
-                    );
+                    clipboard.copy(session?.user?.access_token || "");
 
                     notifications.show({
                       icon: (

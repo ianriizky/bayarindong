@@ -62,23 +62,3 @@
     flex: 1;
   }
 }
-
-.dark {
-  @mixin dark {
-    display: none;
-  }
-
-  @mixin light {
-    display: block;
-  }
-}
-
-.light {
-  @mixin light {
-    display: none;
-  }
-
-  @mixin dark {
-    display: block;
-  }
-}

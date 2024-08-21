@@ -1,9 +1,6 @@
 "use client";
 
-import { client } from "@/lib/client";
 import { Container, Paper, Stack, Table, Title } from "@mantine/core";
-import { useSession } from "next-auth/react";
-import { useEffect } from "react";
 
 const elements = [
   { position: 6, mass: 12.011, symbol: "C", name: "Carbon" },
@@ -14,19 +11,6 @@ const elements = [
 ];
 
 export default function Page() {
-  const { data: session } = useSession();
-
-  const fetchOrders = async () => {
-    const orders = await client.api.order.get({
-      // @ts-ignore
-      headers: { Authentication: `Bearer ${session?.user?.access_token}` },
-    });
-  };
-
-  useEffect(() => {
-    fetchOrders();
-  }, [fetchOrders]);
-
   return (
     <Container size="xl">
       <Paper p="md" shadow="sm" radius="md" withBorder>

@@ -52,8 +52,8 @@ export default async function Layout({
       <body>
         <NextAuthSessionProvider session={session}>
           <MantineProvider theme={theme}>
-            <Notifications limit={5} />
             {children}
+            <Notifications limit={5} />
           </MantineProvider>
         </NextAuthSessionProvider>
       </body>

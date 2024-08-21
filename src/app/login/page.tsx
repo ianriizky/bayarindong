@@ -21,6 +21,7 @@ import { IconArrowNarrowLeft, IconCheck, IconX } from "@tabler/icons-react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Suspense } from "react";
 
 export default function Page() {
   const router = useRouter();
@@ -78,10 +79,18 @@ export default function Page() {
   return (
     <Container size={420} my={40}>
       <Paper radius="md" p="xl" withBorder pos="relative">
-        <LoadingOverlay
-          visible={isFormLoading}
-          zIndex={1000}
-          overlayProps={{ radius: "sm", blur: 2 }}
+        <Suspense
+          fallback={
+            <LoadingOverlay
+              visible={isFormLoading}
+              zIndex={1000}
+              overlayProps={{ radius: "sm", blur: 2 }}
+              loaderProps={{
+                color: "var(--mantine-color-orange-5)",
+                type: "bars",
+              }}
+            />
+          }
         />
 
         <Divider
