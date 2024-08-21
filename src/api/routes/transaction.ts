@@ -10,7 +10,7 @@ export default new Elysia()
       throw new UnauthorizedError("Bearer token is not provided.");
     }
 
-    const userFromToken = await modelX.user.findFirstByToken(bearer);
+    const userFromToken = await modelX.user.findFirstByAccessToken(bearer);
 
     if (!userFromToken) {
       throw new UnauthorizedError("Bearer token is invalid.");

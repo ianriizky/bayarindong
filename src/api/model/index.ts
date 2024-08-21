@@ -23,10 +23,21 @@ if (process.env.NODE_ENV === "development") {
 
 const modelX = model.$extends({
   model: {
+    $allModels: {
+      async exists<T>(
+        this: T,
+        args: prisma.Prisma.Args<T, "findFirst">
+      ): Promise<boolean> {
+        const context = prisma.Prisma.getExtensionContext(this);
+        const result = await (context as any).findFirst(args);
+
+        return result !== null;
+      },
+    },
     user: {
-      findFirstByToken(token: string) {
+      findFirstByAccessToken(access_token: string) {
         return model.user.findFirst({
-          where: { name: atob(token) },
+          where: { name: atob(access_token) },
           include: { role: true },
         });
       },
@@ -66,22 +77,24 @@ const modelX = model.$extends({
           return btoa(user.name);
         },
       },
-      balance: {
+      getBalance: {
         needs: { id: true },
-        async compute(user) {
-          const orders = await model.order.findMany({
-            where: { user: { id: user.id } },
-          });
+        compute(user) {
+          return async () => {
+            const orders = await model.order.findMany({
+              where: { user: { id: user.id } },
+            });
 
-          return orders.reduce((balance, order) => {
-            if (order.type === "deposit") {
-              return balance + order.amount.toNumber();
-            } else if (order.type === "withdraw") {
-              return balance - order.amount.toNumber();
-            } else {
-              return balance;
-            }
-          }, 0);
+            return orders.reduce((balance, order) => {
+              if (order.type === "deposit") {
+                return balance + order.amount.toNumber();
+              } else if (order.type === "withdraw") {
+                return balance - order.amount.toNumber();
+              } else {
+                return balance;
+              }
+            }, 0);
+          };
         },
       },
     },
@@ -107,12 +120,24 @@ const modelX = model.$extends({
       deposit_amount: {
         needs: { type: true, amount: true },
         compute(order) {
+          return order.type === "deposit" ? order.amount.abs() : null;
+        },
+      },
+      deposit_parsed_amount: {
+        needs: { type: true, amount: true },
+        compute(order) {
           return order.type === "deposit"
             ? Math.abs(order.amount.toNumber())
             : 0;
         },
       },
       withdraw_amount: {
+        needs: { type: true, amount: true },
+        compute(order) {
+          return order.type === "withdraw" ? order.amount.neg() : null;
+        },
+      },
+      withdraw_parsed_amount: {
         needs: { type: true, amount: true },
         compute(order) {
           return order.type === "withdraw"
