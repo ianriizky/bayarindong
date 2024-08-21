@@ -108,6 +108,22 @@ export default function Header() {
                 Go to Dashboard
               </Button>
             )}
+
+            <Button
+              variant="default"
+              onClick={() =>
+                setColorScheme(getColorScheme() === "light" ? "dark" : "light")
+              }
+            >
+              <IconSun
+                className={cx(classes.icon, classes.light)}
+                stroke={1.5}
+              />
+              <IconMoon
+                className={cx(classes.icon, classes.dark)}
+                stroke={1.5}
+              />
+            </Button>
           </Group>
         </ScrollArea>
       </Drawer>
