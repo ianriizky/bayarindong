@@ -20,6 +20,7 @@ import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { IconArrowNarrowLeft, IconCheck, IconX } from "@tabler/icons-react";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Suspense } from "react";
@@ -76,7 +77,13 @@ export default function Page() {
       message: response.data?.message || "User registered successfully.",
     });
 
-    router.push("/login");
+    await signIn("credentials", {
+      email: values.email,
+      password: values.password,
+      redirect: false,
+    });
+
+    router.push("/dashboard");
   };
 
   return (
