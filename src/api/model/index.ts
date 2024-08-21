@@ -1,4 +1,5 @@
 import * as hash from "@/lib/hash";
+import { Role } from "@/typebox";
 import { atob, btoa } from "@/utils/str";
 import prisma from "@prisma/client";
 import crypto from "crypto";
@@ -33,7 +34,7 @@ const modelX = model.$extends({
   },
   query: {
     user: {
-      async create({ model, operation, args, query }) {
+      async create({ args, query }) {
         args.data.password = await hash.make(args.data.password);
 
         return query(args);
@@ -41,6 +42,14 @@ const modelX = model.$extends({
     },
   },
   result: {
+    role: {
+      name: {
+        needs: { name: true },
+        compute(role): Role.Name {
+          return role.name as Role.Name;
+        },
+      },
+    },
     user: {
       gravatar_image: {
         needs: { email: true },

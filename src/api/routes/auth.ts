@@ -1,19 +1,15 @@
 import { BadRequestError, NotFoundError, UnauthorizedError } from "@/api/error";
 import { modelX } from "@/api/model";
 import * as hash from "@/lib/hash";
+import { User } from "@/typebox";
+import { Value } from "@sinclair/typebox/value";
 import { Elysia, t } from "elysia";
 
 export default new Elysia()
   .model({
     "auth.response.body": t.Object({
       message: t.String(),
-      data: t.Object({
-        name: t.String(),
-        email: t.String(),
-        gravatar_image: t.String(),
-        access_token: t.String(),
-        role: t.String(),
-      }),
+      data: User.response,
     }),
   })
   .post(
@@ -39,15 +35,12 @@ export default new Elysia()
           email: user.email,
           gravatar_image: user.gravatar_image,
           access_token: user.access_token,
-          role: user.role.name,
+          role_name: user.role.name,
         },
       };
     },
     {
-      body: t.Object({
-        email: t.String({ format: "email" }),
-        password: t.String({ minLength: 6 }),
-      }),
+      body: User.loginRequest,
       response: "auth.response.body",
       detail: {
         tags: ["Authentication"],
@@ -58,10 +51,7 @@ export default new Elysia()
             "application/json": {
               schema: {
                 type: "object",
-                example: {
-                  email: "member@mail.com",
-                  password: "member12345",
-                },
+                example: Value.Default(User.loginRequest, User.dummy),
               },
             },
           },
@@ -75,13 +65,7 @@ export default new Elysia()
                   type: "object",
                   example: {
                     message: "Login successfully.",
-                    data: {
-                      name: "Member",
-                      email: "member@mail.com",
-                      gravatar_image: "https://www.gravatar.com/avatar",
-                      access_token: "abcdef",
-                      role: "member",
-                    },
+                    data: Value.Default(User.response, User.dummy),
                   },
                 },
               },
@@ -192,7 +176,7 @@ export default new Elysia()
         include: { role: true },
       });
 
-      set.status = 201;
+      set.status = "Created";
 
       return {
         message: "User registered successfully.",
@@ -201,17 +185,12 @@ export default new Elysia()
           email: user.email,
           gravatar_image: user.gravatar_image,
           access_token: user.access_token,
-          role: user.role.name,
+          role_name: user.role.name,
         },
       };
     },
     {
-      body: t.Object({
-        name: t.String({ minLength: 4, maxLength: 255 }),
-        email: t.String({ format: "email" }),
-        password: t.String({ minLength: 6, maxLength: 25 }),
-        terms: t.Boolean(),
-      }),
+      body: User.registerRequest,
       response: "auth.response.body",
       detail: {
         tags: ["Authentication"],
@@ -222,12 +201,7 @@ export default new Elysia()
             "application/json": {
               schema: {
                 type: "object",
-                example: {
-                  name: "Member",
-                  email: "member@mail.com",
-                  password: "member12345",
-                  terms: true,
-                },
+                example: Value.Default(User.registerRequest, User.dummy),
               },
             },
           },
@@ -241,13 +215,7 @@ export default new Elysia()
                   type: "object",
                   example: {
                     message: "User registered successfully.",
-                    data: {
-                      name: "Member",
-                      email: "member@mail.com",
-                      gravatar_image: "https://www.gravatar.com/avatar",
-                      access_token: "abcdef",
-                      role: "member",
-                    },
+                    data: Value.Default(User.response, User.dummy),
                   },
                 },
               },
