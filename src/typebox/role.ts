@@ -1,5 +1,7 @@
 import { type Static, t } from "elysia";
 
-export const names = ["admin", "member"] as const;
-export const name = t.Union(names.map((name) => t.Literal(name)));
-export type Name = Static<typeof name>;
+export const roleNames = ["admin", "member"] as const;
+export const roleName = t.Union(
+  roleNames.map((roleName) => t.Literal(roleName))
+);
+export type RoleName = Static<typeof roleName>;

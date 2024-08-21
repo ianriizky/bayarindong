@@ -1,25 +1,16 @@
 import { UnauthorizedError } from "@/api/error";
 import { modelX } from "@/api/model";
+import { dummerOrderIndexResponse, orderIndexResponse } from "@/typebox/order";
+import { getUserFromToken } from "@/utils/resolve";
 import { bearer } from "@elysiajs/bearer";
 import { Elysia, t } from "elysia";
 
 export default new Elysia()
   .use(bearer())
-  .resolve(async ({ bearer }) => {
-    if (!bearer) {
-      throw new UnauthorizedError("Bearer token is not provided.");
-    }
-
-    const userFromToken = await modelX.user.findFirstByAccessToken(bearer);
-
-    if (!userFromToken) {
-      throw new UnauthorizedError("Bearer token is invalid.");
-    }
-
-    return { userFromToken };
-  })
+  .resolve(getUserFromToken)
   .get(
     "/order",
+    // @ts-ignore
     async ({ userFromToken }) => {
       if (userFromToken.role.name !== "admin") {
         throw new UnauthorizedError(
@@ -27,45 +18,43 @@ export default new Elysia()
         );
       }
 
+      const data = await modelX.order.findMany({
+        include: { user: { include: { role: true } } },
+      });
+
       return {
-        data: await modelX.order.findMany({
-          include: { user: { include: { role: true } } },
+        data: data.map((order) => {
+          // @ts-ignore
+          order.user.role_name = order.user.role.name;
+
+          return order;
         }),
       };
     },
     {
       response: t.Object({
-        data: t.Array(
-          t.Object({
-            type: t.Union([t.Literal("deposit"), t.Literal("withdraw")]),
-            amount: t.Any(),
-            status: t.Union([
-              t.Literal("pending"),
-              t.Literal("success"),
-              t.Literal("failed"),
-            ]),
-            timestamp: t.Any(),
-            created_at: t.Any(),
-            updated_at: t.Any(),
-            user: t.Object({
-              name: t.String(),
-              email: t.String({ format: "email" }),
-              role: t.Object({
-                name: t.Union([t.Literal("admin"), t.Literal("member")]),
-              }),
-            }),
-            status_code: t.Union([t.Literal(0), t.Literal(1), t.Literal(2)]),
-            parsed_amount: t.Number(),
-            deposit_amount: t.Number(),
-            withdraw_amount: t.Number(),
-          })
-        ),
+        data: orderIndexResponse,
       }),
       detail: {
         tags: ["Transaction"],
-        summary: "get list of transaction",
+        summary: "index",
         description: "Get list of all transaction.",
         security: [{ bearerAuth: [] }],
+        responses: {
+          "200": {
+            description: "OK",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  example: {
+                    data: dummerOrderIndexResponse,
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     }
   )

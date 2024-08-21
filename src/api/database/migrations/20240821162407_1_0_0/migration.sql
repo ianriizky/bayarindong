@@ -57,7 +57,7 @@ CREATE TABLE "notifications" (
     "id" TEXT NOT NULL,
     "user_id" CHAR(36) NOT NULL,
     "title" VARCHAR(255) NOT NULL,
-    "content" VARCHAR(255) NOT NULL,
+    "message" VARCHAR(255) NOT NULL,
     "is_read" BOOLEAN NOT NULL DEFAULT false,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,

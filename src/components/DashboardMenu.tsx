@@ -1,8 +1,9 @@
 import { useContextActiveDashboardMenu } from "@/hooks/useActiveDashboardMenu";
-import { type Role } from "@/typebox";
+import { type RoleName } from "@/typebox/role";
 import { Skeleton, UnstyledButton, UnstyledButtonProps } from "@mantine/core";
 import {
   Icon,
+  IconBellRinging2,
   IconChartHistogram,
   IconHome,
   IconPig,
@@ -15,7 +16,7 @@ export type Menu = {
   link: string;
   label: string;
   icon: ForwardRefExoticComponent<IconProps & RefAttributes<Icon>>;
-  roles: Role.Name[];
+  roles: RoleName[];
 };
 
 const menus: Menu[] = [
@@ -37,6 +38,12 @@ const menus: Menu[] = [
     icon: IconPig,
     roles: ["admin", "member"],
   },
+  {
+    link: "/dashboard/notification",
+    label: "Notification",
+    icon: IconBellRinging2,
+    roles: ["admin", "member"],
+  },
 ];
 
 export default function DashboardMenu({
@@ -46,7 +53,7 @@ export default function DashboardMenu({
   iconProps,
 }: {
   skeletonNumber?: number;
-  roleName?: Role.Name;
+  roleName?: RoleName;
   unstyledButtonProps: UnstyledButtonProps;
   iconProps: IconProps;
 }) {

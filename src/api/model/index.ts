@@ -1,5 +1,5 @@
 import * as hash from "@/lib/hash";
-import { Role } from "@/typebox";
+import { RoleName } from "@/typebox/role";
 import { atob, btoa } from "@/utils/str";
 import prisma from "@prisma/client";
 import crypto from "crypto";
@@ -56,8 +56,8 @@ const modelX = model.$extends({
     role: {
       name: {
         needs: { name: true },
-        compute(role): Role.Name {
-          return role.name as Role.Name;
+        compute(role): RoleName {
+          return role.name as RoleName;
         },
       },
     },

@@ -1,6 +1,5 @@
 "use client";
 
-import { getColorScheme } from "@/utils/color-scheme";
 import {
   Box,
   Burger,
@@ -10,6 +9,7 @@ import {
   ScrollArea,
   Text,
   rem,
+  useComputedColorScheme,
   useMantineColorScheme,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -24,6 +24,9 @@ export default function Header() {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
   const { setColorScheme } = useMantineColorScheme();
+  const computedColorScheme = useComputedColorScheme("light", {
+    getInitialValueInEffect: true,
+  });
 
   return (
     <Box>
@@ -60,7 +63,9 @@ export default function Header() {
             <Button
               variant="default"
               onClick={() =>
-                setColorScheme(getColorScheme() === "light" ? "dark" : "light")
+                setColorScheme(
+                  computedColorScheme === "light" ? "dark" : "light"
+                )
               }
             >
               <IconSun
@@ -112,7 +117,9 @@ export default function Header() {
             <Button
               variant="default"
               onClick={() =>
-                setColorScheme(getColorScheme() === "light" ? "dark" : "light")
+                setColorScheme(
+                  computedColorScheme === "light" ? "dark" : "light"
+                )
               }
             >
               <IconSun

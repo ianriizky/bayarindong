@@ -60,6 +60,10 @@ export const app = new Elysia({ prefix: "/api" })
             name: "Transaction",
             description: "Transaction API",
           },
+          {
+            name: "Notification",
+            description: "Notification API",
+          },
         ],
         components: {
           securitySchemes: {

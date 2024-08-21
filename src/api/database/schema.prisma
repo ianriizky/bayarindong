@@ -79,7 +79,7 @@ model Notification {
   user_id String @db.Char(36)
 
   title   String  @db.VarChar(255)
-  content String  @db.VarChar(255)
+  message String  @db.VarChar(255)
   is_read Boolean @default(false)
 
   created_at DateTime @default(now())

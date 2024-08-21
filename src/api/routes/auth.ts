@@ -1,15 +1,21 @@
 import { BadRequestError, NotFoundError, UnauthorizedError } from "@/api/error";
 import { modelX } from "@/api/model";
 import * as hash from "@/lib/hash";
-import { User } from "@/typebox";
-import { Value } from "@sinclair/typebox/value";
+import {
+  dummyUserLoginRequest,
+  dummyUserRegisterRequest,
+  dummyUserResponse,
+  userLoginRequest,
+  userRegisterRequest,
+  userResponse,
+} from "@/typebox/user";
 import { Elysia, t } from "elysia";
 
 export default new Elysia()
   .model({
     "auth.response.body": t.Object({
       message: t.String(),
-      data: User.response,
+      data: userResponse,
     }),
   })
   .post(
@@ -40,7 +46,7 @@ export default new Elysia()
       };
     },
     {
-      body: User.loginRequest,
+      body: userLoginRequest,
       response: "auth.response.body",
       detail: {
         tags: ["Authentication"],
@@ -51,7 +57,7 @@ export default new Elysia()
             "application/json": {
               schema: {
                 type: "object",
-                example: Value.Default(User.loginRequest, User.dummy),
+                example: dummyUserLoginRequest,
               },
             },
           },
@@ -65,7 +71,7 @@ export default new Elysia()
                   type: "object",
                   example: {
                     message: "Login successfully.",
-                    data: Value.Default(User.response, User.dummy),
+                    data: dummyUserResponse,
                   },
                 },
               },
@@ -190,7 +196,7 @@ export default new Elysia()
       };
     },
     {
-      body: User.registerRequest,
+      body: userRegisterRequest,
       response: "auth.response.body",
       detail: {
         tags: ["Authentication"],
@@ -201,7 +207,7 @@ export default new Elysia()
             "application/json": {
               schema: {
                 type: "object",
-                example: Value.Default(User.registerRequest, User.dummy),
+                example: dummyUserRegisterRequest,
               },
             },
           },
@@ -215,7 +221,7 @@ export default new Elysia()
                   type: "object",
                   example: {
                     message: "User registered successfully.",
-                    data: Value.Default(User.response, User.dummy),
+                    data: dummyUserResponse,
                   },
                 },
               },

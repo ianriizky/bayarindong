@@ -1,6 +1,18 @@
 "use client";
 
-import { Container, Paper, Stack, Table, Title } from "@mantine/core";
+import { client } from "@/lib/client";
+import {
+  Avatar,
+  Container,
+  Group,
+  Paper,
+  Stack,
+  Table,
+  Text,
+  Title,
+} from "@mantine/core";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 
 const elements = [
   { position: 6, mass: 12.011, symbol: "C", name: "Carbon" },
@@ -11,6 +23,24 @@ const elements = [
 ];
 
 export default function Page() {
+  const { data: session } = useSession();
+  const [response, setResponse] =
+    useState<Awaited<ReturnType<typeof client.api.order.get>>>();
+
+  useEffect(() => {
+    if (!session?.user?.access_token) {
+      return;
+    }
+
+    (async () => {
+      const response = await client.api.order.get({
+        headers: { Authorization: `Bearer ${session?.user?.access_token}` },
+      });
+
+      setResponse(response);
+    })();
+  }, [session?.user?.access_token]);
+
   return (
     <Container size="xl">
       <Paper p="md" shadow="sm" radius="md" withBorder>
@@ -20,20 +50,41 @@ export default function Page() {
           <Table>
             <Table.Thead>
               <Table.Tr>
-                <Table.Th>Element position</Table.Th>
-                <Table.Th>Element name</Table.Th>
-                <Table.Th>Symbol</Table.Th>
-                <Table.Th>Atomic mass</Table.Th>
+                <Table.Th>Type</Table.Th>
+                <Table.Th>Status</Table.Th>
+                <Table.Th>Amount</Table.Th>
+                <Table.Th>Timestamp</Table.Th>
+                <Table.Th>User</Table.Th>
+                <Table.Th>E-mail</Table.Th>
+                <Table.Th>Role</Table.Th>
               </Table.Tr>
             </Table.Thead>
 
             <Table.Tbody>
-              {elements.map((element) => (
-                <Table.Tr key={element.name}>
-                  <Table.Td>{element.position}</Table.Td>
-                  <Table.Td>{element.name}</Table.Td>
-                  <Table.Td>{element.symbol}</Table.Td>
-                  <Table.Td>{element.mass}</Table.Td>
+              {response?.data?.data?.map((order, index) => (
+                <Table.Tr key={index}>
+                  <Table.Td>{order.type}</Table.Td>
+                  <Table.Td>
+                    {order.status} ({order.status_code})
+                  </Table.Td>
+                  <Table.Td>{order.parsed_amount}</Table.Td>
+                  <Table.Td>
+                    {new Date(order.timestamp).toLocaleString()}
+                  </Table.Td>
+                  <Table.Td>
+                    <Group gap="sm">
+                      <Avatar
+                        size={26}
+                        src={order.user.gravatar_image}
+                        radius={26}
+                      />
+                      <Text size="sm" fw={500}>
+                        {order.user.name}
+                      </Text>
+                    </Group>
+                  </Table.Td>
+                  <Table.Td>{order.user.email}</Table.Td>
+                  <Table.Td>{order.user.role_name}</Table.Td>
                 </Table.Tr>
               ))}
             </Table.Tbody>
