@@ -55,7 +55,8 @@ jobs:
             NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,\
             NEXT_PUBLIC_FIREBASE_FCM_VAPID_KEY,\
             NEXT_PUBLIC_GOOGLE_ANALYTICS_ID,\
-            DISABLE_TELEMETRY"
+            DISABLE_TELEMETRY,\
+            ENABLE_EXPERIMENTAL_COREPACK"
         env:
           NEXT_PUBLIC_APP_NAME: ${{ secrets.NEXT_PUBLIC_APP_NAME }}
           TARGET_NEXT_PUBLIC_APP_NAME: preview,development,production # comma delimited, one of [production, preview, development]
@@ -188,6 +189,10 @@ jobs:
           DISABLE_TELEMETRY: ${{ secrets.DISABLE_TELEMETRY }}
           TARGET_DISABLE_TELEMETRY: preview,development,production
           TYPE_DISABLE_TELEMETRY: encrypted
+
+          ENABLE_EXPERIMENTAL_COREPACK: ${{ secrets.ENABLE_EXPERIMENTAL_COREPACK }}
+          TARGET_ENABLE_EXPERIMENTAL_COREPACK: preview,development,production
+          TYPE_ENABLE_EXPERIMENTAL_COREPACK: encrypted
 
       - uses: amondnet/vercel-action@v25.2.0
         with:

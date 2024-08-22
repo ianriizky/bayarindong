@@ -5,7 +5,7 @@ A simple payment gateway service using [Next.js](https://nextjs.org) and [Elysia
 ## Requirement
 
 - Node.js ^20.16.0
-- pnpm ^9.7.1
+- pnpm ^9
 - PostgreSQL ^16.3
 
 ## Installation

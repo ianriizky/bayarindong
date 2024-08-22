@@ -61,6 +61,7 @@ export const envSchema = z.object({
   DISABLE_TELEMETRY: z
     .enum(["true", "false"])
     .transform((value) => value || "true"),
+  ENABLE_EXPERIMENTAL_COREPACK: z.enum(["1", "0"]),
 });
 
 const { NODE_ENV, ...env } = envSchema.parse(process.env);
