@@ -33,7 +33,7 @@ const menus: Menu[] = [
     roles: ["admin"],
   },
   {
-    link: "/dashboard/deposit",
+    link: "/dashboard/deposit-withdraw",
     label: "Deposit & Withdraw",
     icon: IconPig,
     roles: ["admin", "member"],

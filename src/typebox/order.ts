@@ -43,3 +43,23 @@ export const orderIndexResponse = t.Array(order);
 export const dummerOrderIndexResponse = Value.Default(orderIndexResponse, [
   dummyOrder,
 ]);
+
+export const orderStoreRequestBody = t.Object({
+  order_id: t.Optional(t.String({ format: "uuid" })),
+  amount: t.Number({ exclusiveMinimum: 0 }),
+  timestamp: t.String({ format: "date-time" }),
+});
+export const dummerOrderStoreRequestBody = Value.Default(
+  orderStoreRequestBody,
+  {
+    order_id: "560a782c-2100-4801-82ff-6068797e9a0b",
+    amount: 100000,
+    timestamp: "2024-08-17T00:00:00.000Z",
+  }
+);
+
+export const orderShowResponse = order;
+export const dummerOrderShowResponse = Value.Default(
+  orderShowResponse,
+  dummyOrder
+);
