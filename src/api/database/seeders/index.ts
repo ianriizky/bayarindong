@@ -16,4 +16,25 @@ import { RoleName, roleNames } from "@/typebox/role";
       },
     },
   });
+
+  if (process.env.NODE_ENV === "development") {
+    await modelX.order.create({
+      data: {
+        type: "deposit",
+        status: "success",
+        amount: 100000,
+        timestamp: new Date(),
+        user: { connect: { id: user.id } },
+      },
+    });
+
+    await modelX.notification.create({
+      data: {
+        title: "Test",
+        message: "haha",
+        is_read: true,
+        user: { connect: { id: user.id } },
+      },
+    });
+  }
 })();
